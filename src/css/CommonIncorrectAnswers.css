@@ -1,0 +1,25 @@
+.correct-answer {
+    color: white;
+    background-color: green;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.incorrect-answer {
+    color: white;
+    background-color: red;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Add transitions for a smoother experience */
+.correct-answer, .incorrect-answer {
+    transition: all 0.3s ease;
+}
+
+/* Add hover effects */
+.correct-answer:hover, .incorrect-answer:hover {
+    transform: scale(1.1);
+}

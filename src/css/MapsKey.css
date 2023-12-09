@@ -1,0 +1,18 @@
+.maps-key {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.maps-key-street,
+.maps-key-section,
+.maps-key-subsection,
+.maps-key-area {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.maps-key-summary,
+.street-name-summary {
+    margin-right: 5px;
+}

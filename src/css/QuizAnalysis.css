@@ -1,0 +1,80 @@
+/* Quiz Analysis Container */
+.quiz-analysis {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* Quiz Analysis Title */
+.quiz-analysis h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Quiz Select Container */
+.quiz-select-container {
+    margin-bottom: 20px;
+}
+
+/* Quiz Select */
+.quiz-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Correct and Incorrect Answers Containers */
+.correct-answers, .incorrect-answers {
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Answers Table */
+.answers-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table Headers */
+.answers-table th {
+    background-color: #FFD700;
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Table Data */
+.answers-table td {
+    padding: 10px;
+    border-top: 1px solid #f5f5f5;
+}
+
+/* Buttons Container */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Individual Buttons */
+.previous-button, .toggle-answer-button, .next-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #3f51b5;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.previous-button:hover, .toggle-answer-button:hover, .next-button:hover {
+    background-color: #FFD700;
+}

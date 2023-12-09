@@ -1,0 +1,112 @@
+/* QuizzesTimed.css */
+
+.quiz {
+    /* Style for the quiz container */
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.quiz-title {
+    /* Style for the quiz title */
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.quiz-answers {
+    /* Style for the answer buttons container */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.quiz-answer {
+    /* Style for the answer buttons */
+    flex-basis: 48%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.quiz-hints {
+    /* Style for the hint buttons container */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.quiz-hint {
+    /* Style for the hint buttons */
+    flex-basis: 48%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28A745;
+    color: white;
+    cursor: pointer;
+}
+
+.quiz-modal {
+    /* Existing styles */
+    width: 80%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+
+    /* New styles for scrolling */
+    height: 80vh; /* Adjust this value to fit your needs */
+    overflow-y: auto;
+}
+
+
+.modal-title {
+    /* Style for the modal title */
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.modal-content {
+    /* Style for the modal content */
+    margin-bottom: 20px;
+}
+
+.modal-close {
+    /* Style for the modal close button */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #DC3545;
+    cursor: pointer;
+}
+/* CSS */
+@keyframes confetti {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    10% { transform: translateY(10vh) rotate(30deg); }
+    20% { transform: translateY(20vh) rotate(60deg); }
+    30% { transform: translateY(30vh) rotate(90deg); }
+    40% { transform: translateY(40vh) rotate(120deg); }
+    50% { transform: translateY(50vh) rotate(150deg); }
+    60% { transform: translateY(60vh) rotate(180deg); }
+    70% { transform: translateY(70vh) rotate(210deg); }
+    80% { transform: translateY(80vh) rotate(240deg); }
+    90% { transform: translateY(90vh) rotate(270deg); }
+    100% { transform: translateY(100vh) rotate(300deg); opacity: 0; }
+}
+
+.confetti {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    animation: confetti 3s linear infinite;
+}
