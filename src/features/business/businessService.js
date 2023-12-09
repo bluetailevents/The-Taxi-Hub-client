@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = `${process.env.REACT_APP_HOST}/api/business/`;
+const API_URL = `${process.env.REACT_APP_PUBLIC_URL}/api/business/`;
 
 const createBusiness = async (businessData, token) => {
   const config = {
