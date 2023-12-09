@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = `${process.env.REACT_APP_SERVER}/api/openai/`;
+const API_URL = `${process.env.REACT_APP_HOST}/api/openai/`;
 
 const fetchOpenAIData = async (token) => {
   const config = {
