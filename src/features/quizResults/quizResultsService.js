@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = `${process.env.REACT_APP_HOST}/api/quiz-results/`;
+const API_URL = `${process.env.REACT_APP_PUBLIC_URL}/api/quiz-results/`;
 
 const getQuizResults = async (userId, token) => {
     const config = {
