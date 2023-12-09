@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = `${process.env.REACT_APP_SERVER}/api/geojson/`;
+const API_URL = `${process.env.REACT_APP_HOST}/api/geojson/`;
 
 // Get coordinates
 const getCoordinates = async (token) => {
