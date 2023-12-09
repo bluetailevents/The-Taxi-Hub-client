@@ -5,7 +5,7 @@
   "description": "Front end application for the taxi hub website",
   "main": "index.js",
   "scripts": {
-    "build": "npm install && react-scripts build",
+    "build": "npm install && npm build",
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
