@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Replace '/api/users/' with the SERVER environment variable
+
 const API_URL = `${process.env.REACT_APP_SERVER}/api/users/`;
 
 

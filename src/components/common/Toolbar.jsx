@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCoordinates, setSection, setSubsection } from '../../features/coordinates/coordinatesSlice';
-import { setMethod } from '../../features/sections/sectionSlice';
+import { getCoordinates, setSection, setSubsection, setMethod } from '../../features/coordinates/coordinatesSlice';
 
 function Toolbar() {
     const dispatch = useDispatch();

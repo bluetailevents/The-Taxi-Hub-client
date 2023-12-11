@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = `${process.env.REACT_APP_PUBLIC_URL}/api/vacancies/`;
+const API_URL = `${process.env.REACT_APP_SERVER}/api/vacancies/`;
 
 // Create new vacancy
 const createVacancy = async (vacancyData, token) => {
