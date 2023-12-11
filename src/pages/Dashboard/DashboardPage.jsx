@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import Spinner from '../../components/common/Spinner'
 import Goals from '../../components/common/Goals'
 import GoalForm from '../../components/goals/GoalForm'
+import ContentWindow from '../../components/business/ContentWindow'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -30,6 +31,7 @@ function Dashboard() {
       </section>
 
       <Goals />
+      <ContentWindow />
     </div>
   )
 }
