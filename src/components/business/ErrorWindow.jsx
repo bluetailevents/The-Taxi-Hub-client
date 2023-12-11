@@ -2,7 +2,7 @@ import React from 'react'
 
 function ErrorWindow() {
   return (
-    <div>ErrorWindow</div>
+    <div>Error Window</div>
   )
 }
 

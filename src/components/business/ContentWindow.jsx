@@ -14,11 +14,11 @@ import { toggleFinish } from '../../features/actions/actionsSlice'; // Import th
 
 function ContentWindow() {
     const dispatch = useDispatch();
-    const method = useSelector(state => state.sections.method);
-    const section = useSelector(state => state.sections.section);
-    const option = useSelector(state => state.sections.option);
-    const level = useSelector(state => state.sections.level);
-    const timer = useSelector(state => state.sections.timer);
+    const method = useSelector(state => state.coordinates.method);
+    const section = useSelector(state => state.coordinates.section);
+    const option = useSelector(state => state.coordinates.option);
+    const level = useSelector(state => state.coordinates.level);
+    const timer = useSelector(state => state.coordinates.timer);
     const [start, setStart] = useState(false);
 
     const handleFinish = () => {

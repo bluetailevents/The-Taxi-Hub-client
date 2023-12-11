@@ -1,43 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCoordinates, setSection, setSubsection, setMethod } from '../../features/coordinates/coordinatesSlice';
+import { fetchSections, fetchSubsections, setMethod } from '../../features/coordinates/coordinatesSlice';
 
 function Toolbar() {
     const dispatch = useDispatch();
-    const coordinates = useSelector(state => state.coordinates);
+    const { sections, subsections, loading } = useSelector(state => state.coordinates);
     const selectedSection = useSelector(state => state.coordinates.section);
     const selectedSubsection = useSelector(state => state.coordinates.subsection);
-    const [sections, setSections] = useState([]);
-    const [subsections, setSubsections] = useState([]);
 
     useEffect(() => {
-        dispatch(getCoordinates());
+        dispatch(fetchSections());
     }, [dispatch]);
 
     useEffect(() => {
-        if (coordinates && coordinates.coordinates && coordinates.coordinates[0] && coordinates.coordinates[0].features) {
-            const uniqueSections = [...new Set(coordinates.coordinates[0].features.map(feature => feature.properties.Section))];
-            setSections(uniqueSections);
+        if (selectedSection) {
+            dispatch(fetchSubsections(selectedSection));
         }
-    }, [coordinates]);
-
-    useEffect(() => { // New useEffect hook to update subsections when section changes
-        if (selectedSection && coordinates && coordinates.coordinates && coordinates.coordinates[0] && coordinates.coordinates[0].features) {
-            const uniqueSubsections = [...new Set(coordinates.coordinates[0].features.filter(feature => feature.properties.Section === selectedSection).map(feature => feature.properties.Subsection))];
-            setSubsections(uniqueSubsections);
-        }
-    }, [selectedSection, coordinates]);
+    }, [selectedSection, dispatch]);
 
     const handleSectionChange = (event) => {
-        dispatch(setSection(event.target.value));
-        dispatch(setSubsection(''));
+        dispatch(setMethod('')); // Reset method when section changes
+        dispatch(fetchSubsections(event.target.value));
     }
 
     const handleSubsectionChange = (event) => {
-        dispatch(setSubsection(event.target.value));
+        dispatch(setMethod(event.target.value));
     }
 
-    if (coordinates.isLoading) {
+    if (loading) {
         return <div>Loading...</div>;
     }
 
@@ -53,7 +43,7 @@ function Toolbar() {
             {selectedSection && (
                 <select value={selectedSubsection || ''} onChange={handleSubsectionChange}>
                     <option value="">Select a subsection</option>
-                    {subsections.map(subsection => ( // Use subsections state to populate dropdown
+                    {subsections.map(subsection => (
                         <option key={subsection} value={subsection}>{subsection}</option>
                     ))}
                 </select>

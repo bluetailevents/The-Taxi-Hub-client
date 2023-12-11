@@ -4,9 +4,8 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Spinner from '../../components/common/Spinner'
-import Goals from '../../components/common/Goals'
-import GoalForm from '../../components/goals/GoalForm'
 import ContentWindow from '../../components/business/ContentWindow'
+import Toolbar from '../../components/common/Toolbar'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -24,13 +23,7 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <section className='content'>
-        <h1>Welcome {user && user.name}</h1>
-        <p>Goals Dashboard</p>
-        <GoalForm />
-      </section>
-
-      <Goals />
+      <Toolbar />
       <ContentWindow />
     </div>
   )
