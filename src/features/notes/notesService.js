@@ -1,5 +1,5 @@
 import axios from 'axios'
-const API_URL = `${process.env.REACT_APP_SERVER}/api/notes/`;
+const API_URL = `${process.env.REACT_APP_PUBLIC_URL}/api/notes/`;
 // Create new note
 const createNote = async (noteData, token) => {
     const config = {

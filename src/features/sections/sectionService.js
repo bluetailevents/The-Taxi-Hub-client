@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = `${process.env.REACT_APP_SERVER}/api/sections/`;
+const API_URL = `${process.env.REACT_APP_PUBLIC_URL}/api/sections/`;
 
 // Get sections
 const getSections = async (token) => {
