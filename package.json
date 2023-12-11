@@ -1,7 +1,7 @@
 {
   "name": "thetaxihub-frontend",
   "version": "1.0.0",
-  "proxy": "http://localhost:5000",
+  "proxy": "https://p3jpdeiwqg.onrender.com",
   "description": "Front end application for the taxi hub website",
   "main": "index.js",
   "scripts": {
