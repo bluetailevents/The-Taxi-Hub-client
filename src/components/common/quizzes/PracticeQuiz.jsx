@@ -5,7 +5,9 @@ import ResultsModal from '../ResultsModal';
 import '../../../css/PracticeQuiz.css';
 
 function Quiz() {
-    const { coordinates, section: selectedSection, subsection: selectedSubsection } = useSelector(state => state.coordinates);
+    const { coordinates } = useSelector(state => state.coordinates);
+    const {selectedSection, selectedSubsection} = useSelector(state => state.quizResults);
+
     
     const [quizCategories, setQuizCategories] = useState({});
     const [quizQuestions, setQuizQuestions] = useState([]);

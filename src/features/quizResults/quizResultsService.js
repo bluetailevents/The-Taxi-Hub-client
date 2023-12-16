@@ -1,42 +1,34 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API_URL = `${process.env.REACT_APP_SERVER}/api/quiz-results/`;
+const API_URL = `${process.env.REACT_APP_PUBLIC_URL}/api/quiz-results/`;
 
+// Function to get quiz results for a user
 const getQuizResults = async (userId, token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+const config = {
+    headers: {
+    Authorization: `Bearer ${token}`,
+    },
+};
 
-    try {
-        const response = await axios.get(`${API_URL}${userId}`, config);
+const response = await axios.get(`${API_URL}${userId}`, config);
+return response.data;
+};
 
-        return response.data;
-    } catch (error) {
-        console.error('Error in getQuizResults:', error);
-        throw error; // Re-throw the error so it can be caught and handled upstream
-    }
-}
-
-
-
+// Function to create quiz results for a user
 const createQuizResults = async (userId, quizResultData, token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+const config = {
+    headers: {
+    Authorization: `Bearer ${token}`,
+    },
+};
 
-    // Include the userId in the request body
-    const response = await axios.post(`${API_URL}${userId}`, { ...quizResultData, user: userId }, config);
-    return response.data;
-}
-
+const response = await axios.post(`${API_URL}${userId}`, { ...quizResultData, user: userId }, config);
+return response.data;
+};
 
 const quizResultsService = {
-    getQuizResults,
-    createQuizResults,
+getQuizResults,
+createQuizResults,
 };
 
 export default quizResultsService;

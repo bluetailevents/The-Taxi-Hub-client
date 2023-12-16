@@ -14,9 +14,10 @@ import { toggleFinish } from '../../features/actions/actionsSlice'; // Import th
 
 function ContentWindow() {
     const dispatch = useDispatch();
-    const method = useSelector(state => state.coordinates.method);
-    const section = useSelector(state => state.coordinates.section);
-    const option = useSelector(state => state.coordinates.option);
+    // Make sure to access the correct state slices for method, section, and subsection
+    const method = useSelector(state => state.quizResults.selectedMethod);
+    const section = useSelector(state => state.quizResults.selectedSection);
+    const subsection = useSelector(state => state.quizResults.selectedSubsection);
     const level = useSelector(state => state.coordinates.level);
     const timer = useSelector(state => state.coordinates.timer);
     const [start, setStart] = useState(false);
@@ -36,8 +37,11 @@ function ContentWindow() {
                 <div className='method'>{method}</div>
                 <div className='level'>{level}</div>
                 <div className='timer'>{timer}</div>
-                <div className='section'>{section ? section.name : ''}</div>
-                <div className='option'>{option}</div>
+                {/* Display the section value directly if it's a string */}
+                {/* Display the section and subsection values */}
+                {section && <div className='section'>{section}</div>}
+                {subsection && <div className='subsection'>{subsection}</div>}
+                {method && <div className='method'>{method}</div>}
                 <button onClick={handleStart}>Start</button>
             </div>
             <div className={start ? 'show' : 'hide'}>
@@ -50,7 +54,6 @@ function ContentWindow() {
                 {method === 'Maps' && <Maps />}
                 {method === 'Analytics' && <Analytics />}
                 {method === 'List' && <List />}
-
                 <button onClick={handleFinish}>Finish</button>
             </div>
         </div>

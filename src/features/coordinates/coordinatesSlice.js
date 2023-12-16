@@ -1,137 +1,84 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import coordinateService from './coordinatesService';
+import coordinatesService from './coordinatesService';
 
 const initialState = {
-  coordinates: null,
-  section: '',
-  subsection: '',
-  sections: [],
-  subsections: [],
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
-  message: '',
+    sections: [],
+    subsections: {},
+    categories: [],
+    streets: [],
+    coordinates: [],
+    loading: false,
+    error: null,
+    loaded: false, // Flag to indicate if the data has been loaded
 };
 
-// Async thunk for fetching sections
-export const fetchSections = createAsyncThunk(
-  'coordinatesSlice/fetchSections',
-  async (_, thunkAPI) => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER}/api/sections`);
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
-);
 
 // Async thunk for fetching subsections
 export const fetchSubsections = createAsyncThunk(
-  'coordinatesSlice/fetchSubsections',
-  async (section, thunkAPI) => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER}/api/subsections`, {
-        params: { section },
-      });
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
-);
-
-// Existing getCoordinates thunk
-export const getCoordinates = createAsyncThunk(
-  'coordinates/getAll',
-  async (_, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().auth.user.token;
-      console.log(token);
-      const coordinates = await coordinateService.getCoordinates(token);
-      return coordinates;
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-// Slice
-const coordinatesSlice = createSlice({
-  name: 'coordinates',
-  initialState,
-  reducers: {
-    setSection: (state, action) => {
-      state.section = action.payload;
-      // When the section changes, filter the subsections
-      if (state.coordinates && state.coordinates.coordinates && state.coordinates.coordinates[0] && state.coordinates.coordinates[0].features) {
-        const uniqueSubsections = [...new Set(state.coordinates.coordinates[0].features.filter(feature => feature.properties.Section === action.payload).map(feature => feature.properties.Subsection))];
-        state.subsections = uniqueSubsections;
-      }
-    },
-    setSubsection: (state, action) => {
-      state.subsection = action.payload;
-    },
-    reset: (state) => initialState,
-    setMethod: (state, action) => {
-      state.method = action.payload;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchSections.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchSections.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.sections = action.payload;
-      })
-      .addCase(fetchSections.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      .addCase(fetchSubsections.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchSubsections.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.subsections = action.payload;
-      })
-      .addCase(fetchSubsections.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      .addCase(getCoordinates.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getCoordinates.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.coordinates = action.payload;
-        // When the coordinates are loaded, compute the unique sections
-        if (action.payload && action.payload.coordinates && action.payload.coordinates[0] && action.payload.coordinates[0].features) {
-          const uniqueSections = [...new Set(action.payload.coordinates[0].features.map(feature => feature.properties.Section))];
-          state.sections = uniqueSections;
+    'coordinatesSlice/fetchSubsections',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await coordinatesService.getSubsections();
+            // Transform the array of objects into an object with section names as keys
+            const subsectionsBySection = response.reduce((acc, current) => {
+                acc[current.Section] = current.Subsections;
+                return acc;
+            }, {});
+            return subsectionsBySection;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
         }
-      })
-      .addCase(getCoordinates.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      });
-  },
+    }
+);
+
+
+// Async thunk for fetching the GeoJSON data
+export const fetchCoordinates = createAsyncThunk(
+    'coordinatesSlice/fetchCoordinates',
+    async (_, { rejectWithValue }) => {
+        try {
+            return await coordinatesService.getCoordinates();
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+const coordinatesSlice = createSlice({
+    name: 'coordinatesSlice',
+    initialState,
+    reducers: {
+        // Define your synchronous actions here, if any
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchSubsections.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchSubsections.fulfilled, (state, action) => {
+                state.loading = false;
+                state.loaded = true;
+                state.sections = Object.keys(action.payload); // Assuming the payload is an object with sections as keys
+                state.subsections = action.payload; // Assuming the payload is an object with sections as keys and arrays of subsections as values
+            })
+            .addCase(fetchSubsections.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            
+            .addCase(fetchCoordinates.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchCoordinates.fulfilled, (state, action) => {
+                state.loading = false;
+                // Update the state with the fetched coordinates
+                state.coordinates = action.payload; // Make sure this matches the structure of your state
+            })  
+            .addCase(fetchCoordinates.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            });
+    }
 });
 
-export const { setSection, setSubsection, reset, setMethod } = coordinatesSlice.actions;
 export default coordinatesSlice.reducer;

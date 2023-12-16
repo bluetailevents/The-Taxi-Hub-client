@@ -1,126 +1,34 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+// coordinatesService.js
 import axios from 'axios';
 
-const initialState = {
-  sections: [],
-  subsections: [],
-  categories: [],
-  streets: [],
-  loading: false,
-  error: null,
+const API_URL = process.env.REACT_APP_SERVER;
+
+const getSections = async () => {
+  const response = await axios.get(`${API_URL}/api/geojson/sections`);
+  return response.data;
 };
 
-// Async thunk for fetching sections
-export const fetchSections = createAsyncThunk(
-  'coordinatesSlice/fetchSections',
-  async (section, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER}/api/sections`, {
-        params: { section },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
+const getSubsections = async (section) => {
+  const response = await axios.get(`${API_URL}/api/geojson/sections/subsections`);
+  return response.data;
+};
+
+const getCoordinates = async () => {
+  const response = await axios.get(`${API_URL}/api/geojson/`);
+  if (response.status === 200) {
+      return response.data; // This should be the GeoJSON data
+  } else {
+      throw new Error('Failed to fetch coordinates');
   }
-);
+};
 
-// Async thunk for fetching subsections
-export const fetchSubsections = createAsyncThunk(
-  'coordinatesSlice/fetchSubsections',
-  async (section, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER}/api/subsections`, {
-        params: { section },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
 
-// Async thunk for fetching categories
-export const fetchCategories = createAsyncThunk(
-  'coordinatesSlice/fetchCategories',
-  async ({ section, subsection }, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER}/api/categories`, {
-        params: { section, subsection },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
 
-// Async thunk for fetching streets
-export const fetchStreets = createAsyncThunk(
-  'coordinatesSlice/fetchStreets',
-  async (category, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER}/api/streets`, {
-        params: { category },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+const coordinatesService = {
+  getSections,
+  getSubsections,
+  getCoordinates
+};
 
-const coordinatesSlice = createSlice({
-  name: 'coordinatesSlice',
-  initialState,
-  reducers: {},
-  extraReducers: {
-    [fetchSections.pending]: (state) => {
-      state.loading = true;
-    },
-    [fetchSections.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.sections = action.payload;
-    },
-    [fetchSections.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [fetchSubsections.pending]: (state) => {
-      state.loading = true;
-    },
-    [fetchSubsections.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.subsections = action.payload;
-    },
-    [fetchSubsections.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [fetchCategories.pending]: (state) => {
-      state.loading = true;
-    },
-    [fetchCategories.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.categories = action.payload;
-    },
-    [fetchCategories.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [fetchStreets.pending]: (state) => {
-      state.loading = true;
-    },
-    [fetchStreets.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.streets = action.payload;
-    },
-    [fetchStreets.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-  },
-});
-
-export const { reducer } = coordinatesSlice;
-export default coordinatesSlice.reducer;
+export default coordinatesService;

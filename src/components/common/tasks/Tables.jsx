@@ -1,87 +1,99 @@
-// Maps.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCoordinates } from '../../../features/coordinates/coordinatesSlice';
+import { fetchCoordinates } from '../../../features/coordinates/coordinatesSlice';
 import Modal from 'react-modal';
 import LeafletMap from '../animations/LeafletMap';
 import _ from 'lodash';
 
 function Table({ modalIsOpen, setModalIsOpen }) {
     const dispatch = useDispatch();
-    const [coordinates, setCoordinates] = useState([]);
-    var [allCoordinates, setAllCoordinate] = useState([]);
+    const { coordinates, loading } = useSelector(state => state.coordinates);
+    const { selectedSection, selectedSubsection } = useSelector(state => state.quizResults);
+    const [allCoordinates, setAllCoordinates] = useState([]);
+
     useEffect(() => {
-        dispatch(getCoordinates());
-    }, [dispatch]);
+        if (!coordinates || coordinates.length === 0 || loading) {
+            dispatch(fetchCoordinates());
+        }
+    }, [dispatch, coordinates, loading]);
 
-    const coordinatesData = useSelector(state => state.coordinates);
-    const section = useSelector(state => state.sections.section);
-    const option = useSelector(state => state.sections.option);
+    const matchingFeatures = useMemo(() => {
+        return (coordinates && coordinates.length > 0 && coordinates[0]?.features)
+            ? coordinates[0].features.filter(feature => 
+                feature.properties.Section === selectedSection && 
+                feature.properties.Subsection === selectedSubsection)
+            : [];
+    }, [coordinates, selectedSection, selectedSubsection]);
 
-    let filteredData = [];
-    if (coordinatesData && coordinatesData.coordinates['654ba3a6f3e34b062d299d40'] && coordinatesData.coordinates['654ba3a6f3e34b062d299d40'][section.name] && coordinatesData.coordinates['654ba3a6f3e34b062d299d40'][section.name][option]) {
-        filteredData = coordinatesData.coordinates['654ba3a6f3e34b062d299d40'][section.name][option];
-    }
 
-    const groupedData = _.groupBy(filteredData, 'Area');
+
+    const sortedAndGroupedFeatures = useMemo(() => {
+        const sortedFeatures = [...matchingFeatures].sort((a, b) => {
+            const postcodeA = a.properties.Postcode.split(' ')[0];
+            const postcodeB = b.properties.Postcode.split(' ')[0];
+            return postcodeA.localeCompare(postcodeB);
+        });
+        return _.groupBy(sortedFeatures, feature => feature.properties.Category);
+    }, [matchingFeatures]);
+
+    const postcodeOverview = useMemo(() => {
+        return Object.entries(sortedAndGroupedFeatures).reduce((acc, [area, features]) => {
+            const postcodes = features.map(f => f.properties.Postcode.split(' ')[0]);
+            acc[area] = [...new Set(postcodes)].join(', ');
+            return acc;
+        }, {});
+    }, [sortedAndGroupedFeatures]);
+
     const handleOptionClick = () => {
-        // Logic for when the option is clicked
-        // Loop through all areas and add them to the coordinates
-        const allCoordinates = Object.keys(groupedData).flatMap(area => groupedData[area].map(coordinate => ({ 
-            area: coordinate.Area, 
-            street: coordinate.Street, 
-            lat: coordinate.Latitude, 
-            lng: coordinate.Longitude, 
-            postcode: coordinate.Postcode 
-        })));
-        setCoordinates(allCoordinates);
-        setModalIsOpen(true);
-    };
-    
-    const handleAreaClick = (area) => {
-        // Logic for when the area is clicked
-        // Loop through all streets and add the streets to the coordinates
-        allCoordinates = groupedData[area].map(coordinate => ({
-            area: coordinate.Area,
-            street: coordinate.Street,
-            lat: coordinate.Latitude,
-            lng: coordinate.Longitude,
-            postcode: coordinate.Postcode
+        const allCoords = matchingFeatures.map(feature => ({ 
+            area: feature.properties.Category, 
+            street: feature.properties.Street, 
+            lat: feature.geometry.coordinates[1], 
+            lng: feature.geometry.coordinates[0], 
+            postcode: feature.properties.Postcode 
         }));
-        setCoordinates(allCoordinates);
-        setAllCoordinate(allCoordinates);
+        setAllCoordinates(allCoords);
         setModalIsOpen(true);
     };
 
-
+    if (loading || !coordinates || coordinates.length === 0) {
+        return <div>Loading coordinates...</div>;
+    }
 
     return (
         <div className="coordinates-data">
-            <h1>Coordinates Data for {section.name}</h1>
-            <h1 onClick={handleOptionClick}>{option}</h1>
-            {filteredData.length > 0 ? (
+            <h1>Coordinates Data for {selectedSection}</h1>
+            <h1 onClick={handleOptionClick}>{selectedSubsection}</h1>
+            {matchingFeatures.length > 0 ? (
                 <table className="data-table">
                     <thead>
                         <tr>
                             <th>Area</th>
-                            <th>Street</th>
-                            <th>Postcode</th>
+                            {[...Array(4)].map((_, index) => (
+                                <th key={index}>Street {index + 1}</th>
+                            ))}
+                            <th>Postcode Overview</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.keys(groupedData).map((area, index) => (
-                            <tr key={index} className="coordinate-row">
-                                <td onClick={() => handleAreaClick(area)}>
-                                    {area}
-                                </td>
-                                <td>{groupedData[area][0].Street}</td>
-                                <td>{groupedData[area][0].Postcode}</td>
-                            </tr>
-                        ))}
+                        {Object.entries(sortedAndGroupedFeatures).map(([area, features]) => {
+                            return (
+                                <tr key={area} className="coordinate-row">
+                                    <td>{area}</td>
+                                    {[...Array(4)].map((_, index) => {
+                                        const feature = features[index];
+                                        return (
+                                            <td key={index}>{feature?.properties.Street || ''}</td>
+                                        );
+                                    })}
+                                    <td>{postcodeOverview[area]}</td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             ) : (
-                <p className="no-data">No data available for the selected section and option.</p>
+                <p>No data available for the selected section and option.</p>
             )}
             <Modal
                 isOpen={modalIsOpen}
@@ -90,7 +102,7 @@ function Table({ modalIsOpen, setModalIsOpen }) {
             >
                 <div>
                     <button onClick={() => setModalIsOpen(false)}>Close</button>
-                    <LeafletMap coordinates={coordinates} allCoordinates={allCoordinates} />
+                    <LeafletMap coordinates={allCoordinates} />
                 </div>
             </Modal>
         </div>

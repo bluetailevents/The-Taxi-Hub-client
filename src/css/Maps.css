@@ -36,3 +36,8 @@
     cursor: pointer;
     border-radius: 4px;
 }
+.leaflet-map-container {
+    height: 400px; /* Adjust the height as needed */
+    width: 100%;
+  }
+  

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
-import { getCoordinates } from '../coordinates/coordinatesSlice'
+import { fetchCoordinates } from '../coordinates/coordinatesSlice'
 
 // Get user from localStorage
 const user = JSON.parse(localStorage.getItem('user'))
@@ -36,7 +36,7 @@ export const register = createAsyncThunk(
 export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   try {
     const response = await authService.login(user, url+'auth/login') // Pass the URL to authService.login
-    thunkAPI.dispatch(getCoordinates())
+    thunkAPI.dispatch(fetchCoordinates())
     return response;
   } catch (error) {
     const message =

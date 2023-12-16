@@ -1,68 +1,104 @@
-// Flashcards.jsx
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCoordinates } from '../../../features/coordinates/coordinatesSlice';
 
 function Flashcards() {
-    const section = useSelector(state => state.sections.section);
-    const option = useSelector(state => state.sections.option);
-    const data = section ? section[option] : {};
-    const locations = Object.keys(data);
+    const dispatch = useDispatch();
+    const { coordinates } = useSelector(state => state.coordinates);
+    const { selectedSection, selectedSubsection } = useSelector(state => state.quizResults);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
-    const currentLocation = locations[currentCardIndex];
     const [isFlipped, setIsFlipped] = useState(false);
     const [animation, setAnimation] = useState('');
     const [userInput, setUserInput] = useState('');
 
+    useEffect(() => {
+        dispatch(fetchCoordinates());
+    }, [dispatch]);
+
+    // Ensure that coordinates[0]?.features is defined and is an array before using .forEach
+    const matchingFeatures = useMemo(() => {
+        return (coordinates[0]?.features && Array.isArray(coordinates[0]?.features))
+            ? coordinates[0].features.filter(feature => 
+                feature.properties.Section === selectedSection && 
+                feature.properties.Subsection === selectedSubsection)
+            : [];
+    }, [coordinates, selectedSection, selectedSubsection]);
+
+    const streetsByCategory = useMemo(() => {
+        const streetsMap = {};
+        matchingFeatures.forEach(feature => {
+            const category = feature.properties.Category;
+            const street = feature.properties.Street;
+            if (!streetsMap[category]) {
+                streetsMap[category] = [];
+            }
+            streetsMap[category].push(street);
+        });
+        return streetsMap;
+    }, [matchingFeatures]);
+
+    const categories = useMemo(() => {
+        return Object.keys(streetsByCategory).sort();
+    }, [streetsByCategory]);
+
+    const handlePrevious = () => {
+        if (currentCardIndex > 0) {
+            setCurrentCardIndex(currentCardIndex - 1);
+            setIsFlipped(false);
+            setAnimation('');
+        }
+    };
+
     const handleInputChange = (event) => {
         setUserInput(event.target.value);
-    }
+    };
 
     const handleCheckAnswer = () => {
-        if (userInput.toLowerCase() === currentLocation.toLowerCase()) {
-            alert('Correct!');
-        } else {
-            alert(`Incorrect. The correct answer is ${currentLocation}.`);
-        }
-        setUserInput(''); // Clear the input box
-    }
+        // Implement the logic to check the user's answer here
+        // For example:
+        // if (streetsByCategory[categories[currentCardIndex]].includes(userInput.trim())) {
+        //     setAnimation('correct');
+        // } else {
+        //     setAnimation('incorrect');
+        // }
+    };
 
     const handleNext = () => {
-        setIsFlipped(false);
-        setAnimation('fall');
-        setCurrentCardIndex((currentCardIndex + 1) % locations.length);
-    };
- 
-    const handlePrevious = () => {
-        setIsFlipped(false);
-        setAnimation('rise');
-        setCurrentCardIndex((currentCardIndex - 1 + locations.length) % locations.length);
+        if (currentCardIndex < categories.length - 1) {
+            setCurrentCardIndex(currentCardIndex + 1);
+            setIsFlipped(false);
+            setAnimation('');
+        }
     };
 
     const isAtBeginning = currentCardIndex === 0;
-    const isAtEnd = currentCardIndex === locations.length - 1;
+    const isAtEnd = currentCardIndex === categories.length - 1;
+
+    const currentCategory = categories[currentCardIndex];
+    const currentStreets = streetsByCategory[currentCategory];
 
     return (
         <div className="flashcards">
-        <div className={`card ${isFlipped ? 'flipped' : ''} ${animation}`} onClick={() => setIsFlipped(!isFlipped)}>
-            <div className="front">
-            {data[currentLocation].join(', ')}
+            <div className={`card ${isFlipped ? 'flipped' : ''} ${animation}`} onClick={() => setIsFlipped(!isFlipped)}>
+                <div className="front">
+                    {currentCategory}
+                </div>
+                <div className="back">
+                    {currentStreets && currentStreets.join(', ')}
+                </div>
             </div>
-            <div className="back">
-            {currentLocation}
+            <div className="card-navigation">
+                <button onClick={handlePrevious} disabled={isAtBeginning}>
+                    Previous
+                </button>
+                <div className="answer-input">
+                    <input type="text" value={userInput} onChange={handleInputChange} placeholder="Enter your answer here" />
+                    <button onClick={handleCheckAnswer}>Check Answer</button>
+                </div>
+                <button onClick={handleNext} disabled={isAtEnd}>
+                    Next
+                </button>
             </div>
-        </div>
-        <div className="card-navigation">
-            <button onClick={handlePrevious} disabled={isAtBeginning}>
-            Previous
-            </button>
-            <div className="answer-input">
-                <input type="text" value={userInput} onChange={handleInputChange} placeholder="Enter your answer here" />
-                <button onClick={handleCheckAnswer}>Check Answer</button>
-            </div>
-            <button onClick={handleNext} disabled={isAtEnd}>
-            Next
-            </button>
-        </div>
         </div>
     );
 }

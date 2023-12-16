@@ -4,7 +4,7 @@ import authReducer from '../features/auth/authSlice';
 import goalReducer from '../features/goals/goalSlice';
 import notesReducer from '../features/notes/notesSlice';
 import quizResultsReducer from '../features/quizResults/quizResultsSlice';
-import getCoordinates from '../features/coordinates/coordinatesSlice';
+import coordinatesReducer from '../features/coordinates/coordinatesSlice';
 
 
 const actionLogger = (store) => (next) => (action) => {
@@ -17,7 +17,7 @@ export const store = configureStore({
         goals: goalReducer,
         notes: notesReducer,
         quizResults: quizResultsReducer,
-        coordinates: getCoordinates,
+        coordinates: coordinatesReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(thunk, actionLogger),
