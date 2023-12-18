@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getQuizResults } from '../../features/quizResults/quizResultsSlice.js';
-import PerformanceOverTime from '../common/analysis/PerformanceOverTime.jsx';
-import CommonlyIncorrectAnswers from '../common/analysis/CommonlyIncorrectAnswers.jsx';
-import TimeSpentOnEachQuestion from '../common/analysis/TimeSpentOnEachQuestion.jsx';
-import QuizAnalysis from '../common/analysis/QuizAnalysis.jsx';
-import Overview from '../common/analysis/Overview.jsx';
+import { getQuizResults } from '../features/quizResults/quizResultsSlice.js';
+import PerformanceOverTime from '../components/common/analysis/PerformanceOverTime.jsx';
+import CommonlyIncorrectAnswers from '../components/common/analysis/CommonlyIncorrectAnswers.jsx';
+import TimeSpentOnEachQuestion from '../components/common/analysis/TimeSpentOnEachQuestion.jsx';
+import QuizAnalysis from '../components/common/analysis/QuizAnalysis.jsx';
+import Overview from '../components/common/analysis/Overview.jsx';
 
 function AnalyticsComponent() {
     const dispatch = useDispatch();

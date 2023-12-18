@@ -2,12 +2,13 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import ResultsModal from '../ResultsModal';
+import { useDispatch } from 'react-redux';
+import { fetchCoordinates } from '../../../features/coordinates/coordinatesSlice';
 import '../../../css/PracticeQuiz.css';
 
 function Quiz() {
     const { coordinates } = useSelector(state => state.coordinates);
     const {selectedSection, selectedSubsection} = useSelector(state => state.quizResults);
-
     
     const [quizCategories, setQuizCategories] = useState({});
     const [quizQuestions, setQuizQuestions] = useState([]);
@@ -16,6 +17,7 @@ function Quiz() {
     const [allUserAnswers, setAllUserAnswers] = useState({});
     const [showHint, setShowHint] = useState(false);
     const [quizCompleted, setQuizCompleted] = useState(false);
+    const dispatch = useDispatch();
     const handleShowHintClick = () => {
         setShowHint(!showHint);
     };
@@ -26,6 +28,14 @@ function Quiz() {
             coordinate.properties.Subsection === selectedSubsection
         );
     }, [coordinates, selectedSection, selectedSubsection]);
+
+    useEffect(() => {
+        if(!coordinates || coordinates.length === 0) {
+            dispatch(fetchCoordinates());
+        }
+    }, [dispatch, coordinates]);
+    
+
 
     useEffect(() => {
         if (matchingFeatures && matchingFeatures.length > 0) {

@@ -12,10 +12,11 @@ function Table({ modalIsOpen, setModalIsOpen }) {
     const [allCoordinates, setAllCoordinates] = useState([]);
 
     useEffect(() => {
-        if (!coordinates || coordinates.length === 0 || loading) {
+        
+        if (!coordinates) {
             dispatch(fetchCoordinates());
         }
-    }, [dispatch, coordinates, loading]);
+    }, [dispatch, coordinates]);
 
     const matchingFeatures = useMemo(() => {
         return (coordinates && coordinates.length > 0 && coordinates[0]?.features)

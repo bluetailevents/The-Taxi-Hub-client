@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Flashcards from '../common/tasks/Flashcards';
-import PracticeQuiz from '../common/quizzes/PracticeQuiz';
-import QuizzesTimed from '../common/quizzes/QuizzesTimed';
-import NoteTaking from '../common/tasks/NoteTaking';
-import MnemonicDevices from '../common/tasks/MnemonicDevices';
-import Tables from '../common/tasks/Tables';
-import Maps from '../common/tasks/Maps';
-import List from '../common/tasks/List';
+import Flashcards from '../components/common/tasks/Flashcards';
+import PracticeQuiz from '../components/common/quizzes/PracticeQuiz';
+import QuizzesTimed from '../components/common/quizzes/QuizzesTimed';
+import NoteTaking from '../components/common/tasks/NoteTaking';
+import MnemonicDevices from '../components/common/tasks/MnemonicDevices';
+import Tables from '../components/common/tasks/Tables';
+import Maps from '../components/common/tasks/ViewMaps';
+import List from '../components/common/tasks/List';
 import Analytics from './AnalyticsWindow';
-import '../../css/ContentWindow.css';
-import { toggleFinish } from '../../features/actions/actionsSlice'; // Import the action
+import '../css/ContentWindow.css';
+import { toggleFinish } from '../features/actions/actionsSlice'; // Import the action
 
 function ContentWindow() {
     const dispatch = useDispatch();

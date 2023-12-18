@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Spinner from '../../components/common/Spinner'
-import ContentWindow from '../../components/business/ContentWindow'
+import ContentWindow from '../../windows/ContentWindow'
 import Toolbar from '../../components/common/Toolbar'
 
 function Dashboard() {

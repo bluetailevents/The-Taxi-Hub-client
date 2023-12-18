@@ -12,8 +12,10 @@ function Flashcards() {
     const [userInput, setUserInput] = useState('');
 
     useEffect(() => {
-        dispatch(fetchCoordinates());
-    }, [dispatch]);
+        if (!coordinates) {
+            dispatch(fetchCoordinates());
+        }
+    }, [dispatch, coordinates]);
 
     // Ensure that coordinates[0]?.features is defined and is an array before using .forEach
     const matchingFeatures = useMemo(() => {

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSubsections } from '../../features/coordinates/coordinatesSlice';
 import { setSelectedMethod, setSelectedSection, setSelectedSubsection } from '../../features/quizResults/quizResultsSlice';
+import '../../css/Toolbar.css';
 
 function Toolbar() {
     const dispatch = useDispatch();
@@ -67,4 +68,4 @@ function Toolbar() {
     );
 }
 
-export default Toolbar;
+export default memo(Toolbar);

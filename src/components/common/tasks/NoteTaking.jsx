@@ -12,7 +12,7 @@ function NoteTaking() {
 
     useEffect(() => {
         // Dispatch fetchCoordinates if coordinates are not loaded
-        if (!coordinates[0]?.features) {
+        if (!coordinates) {
             dispatch(fetchCoordinates());
         }
     }, [dispatch, coordinates]);

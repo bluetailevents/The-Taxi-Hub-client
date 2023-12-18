@@ -1,5 +1,5 @@
 import React from 'react'
-import VacanciesWindow from '../../components/business/VacanciesWindow'
+import VacanciesWindow from '../../components/windows/VacanciesWindow'
 
 function BusinessPage() {
   return (

@@ -5,3 +5,7 @@
 .hide {
     display: none;
 }
+
+.content-window{
+    width: 100%;
+}
