@@ -8,11 +8,10 @@ function MnemonicDevices() {
     const { selectedSection, selectedSubsection } = useSelector(state => state.quizResults);
 
     useEffect(() => {
-        // Dispatch fetchCoordinates if coordinates are not loaded
-        if (!coordinates || loading) {
+        if(!coordinates || coordinates.length === 0) {
             dispatch(fetchCoordinates());
         }
-    }, [dispatch, coordinates, loading]);
+    }, [dispatch, coordinates]);
 
     // Check if the coordinates are still loading or if they have not been loaded yet
     if (loading || !coordinates) {

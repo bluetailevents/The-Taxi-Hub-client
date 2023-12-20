@@ -1,43 +1,13 @@
-.map-legend {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
-    background: white;
-    padding: 10px;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
 
-.map-legend {
-    position: absolute;
-    background-color: #f9f9f9;
-    border: 1px solid #bbb;
-    padding: 10px;
-    margin-bottom: 10px;
-    font-family: Arial, sans-serif;
-    
-}
-
-.map-legend input[type="checkbox"] {
-    margin-right: 5px;
-}
-
-.expand-collapse-button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-.leaflet-map-container {
+.map-container {
     height: 400px; /* Adjust the height as needed */
     width: 100%;
-  }
-  
+    position: relative; /* Ensures the map is positioned relative to its parent div */
+    z-index: 1; /* Ensures the map is displayed above elements with a lower z-index */
+}
+
+
+.navigation-buttons {
+    position: relative; /* Add this line */
+    z-index: 0; /* Add this line */
+}

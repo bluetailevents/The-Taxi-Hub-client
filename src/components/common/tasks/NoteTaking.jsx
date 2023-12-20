@@ -10,9 +10,9 @@ function NoteTaking() {
     const [notes, setNotes] = useState({});
     const [showInput, setShowInput] = useState({});
 
+
     useEffect(() => {
-        // Dispatch fetchCoordinates if coordinates are not loaded
-        if (!coordinates) {
+        if(!coordinates || coordinates.length === 0) {
             dispatch(fetchCoordinates());
         }
     }, [dispatch, coordinates]);
@@ -52,8 +52,7 @@ function NoteTaking() {
         });
     };
 
-    // Check if the coordinates are still loading or if they have not been loaded yet
-    if (!coordinates[0]?.features) {
+    if (!coordinates || coordinates.length === 0) {
         return <div>Loading coordinates...</div>;
     }
 

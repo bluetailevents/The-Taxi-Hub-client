@@ -12,7 +12,7 @@ function Flashcards() {
     const [userInput, setUserInput] = useState('');
 
     useEffect(() => {
-        if (!coordinates) {
+        if(!coordinates || coordinates.length === 0) {
             dispatch(fetchCoordinates());
         }
     }, [dispatch, coordinates]);

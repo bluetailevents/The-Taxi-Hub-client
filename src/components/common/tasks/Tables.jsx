@@ -12,8 +12,7 @@ function Table({ modalIsOpen, setModalIsOpen }) {
     const [allCoordinates, setAllCoordinates] = useState([]);
 
     useEffect(() => {
-        
-        if (!coordinates) {
+        if(!coordinates || coordinates.length === 0) {
             dispatch(fetchCoordinates());
         }
     }, [dispatch, coordinates]);

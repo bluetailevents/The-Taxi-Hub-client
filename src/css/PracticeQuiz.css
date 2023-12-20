@@ -59,3 +59,9 @@
     border: 2px solid #3f51b5; /* Indigo border on hover */
 }
 
+.map-container {
+    height: 500px; /* Adjust the height as needed */
+    width: 500px;
+    position: relative; /* Ensures the map is positioned relative to its parent div */
+    z-index: 1; /* Ensures the map is displayed above elements with a lower z-index */
+}

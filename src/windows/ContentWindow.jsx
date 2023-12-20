@@ -2,13 +2,9 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Flashcards from '../components/common/tasks/Flashcards';
 import PracticeQuiz from '../components/common/quizzes/PracticeQuiz';
-import QuizzesTimed from '../components/common/quizzes/QuizzesTimed';
 import NoteTaking from '../components/common/tasks/NoteTaking';
-import MnemonicDevices from '../components/common/tasks/MnemonicDevices';
 import Tables from '../components/common/tasks/Tables';
-import Maps from '../components/common/tasks/ViewMaps';
-import List from '../components/common/tasks/List';
-import Analytics from './AnalyticsWindow';
+import Maps from '../components/common/quizzes/MapsQuiz';
 import '../css/ContentWindow.css';
 import { toggleFinish } from '../features/actions/actionsSlice'; // Import the action
 
@@ -47,13 +43,9 @@ function ContentWindow() {
             <div className={start ? 'show' : 'hide'}>
                 {method === 'Flashcards' && <Flashcards />}
                 {method === 'Practice Quiz' && <PracticeQuiz />}
-                {method === 'QuizzesTimed' && <QuizzesTimed />}
                 {method === 'NoteTaking' && <NoteTaking />}
-                {method === 'MnemonicDevices' && <MnemonicDevices />}
                 {method === 'Tables' && <Tables />}
                 {method === 'Maps' && <Maps />}
-                {method === 'Analytics' && <Analytics />}
-                {method === 'List' && <List />}
                 <button onClick={handleFinish}>Finish</button>
             </div>
         </div>

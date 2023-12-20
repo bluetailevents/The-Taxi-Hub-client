@@ -108,7 +108,6 @@ function Quiz() {
     
 
     const finalResults = useMemo(() => {
-        console.log('All User Answers:', allUserAnswers);
         return Object.keys(quizCategories).reduce((results, category) => {
             const userAnswers = allUserAnswers[category] || [];
             const correctAnswers = quizCategories[category] || [];
