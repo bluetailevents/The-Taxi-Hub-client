@@ -33,7 +33,7 @@ const LeafletMap = ({ coordinates }) => {
         scrollWheelZoom={false} 
         id="map" 
         style={{ 
-            height: '100%', 
+            height: '400px', 
             width: '100%',
             zIndex: 0,
             position: 'absolute',

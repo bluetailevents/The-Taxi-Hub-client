@@ -1,13 +1,20 @@
 
-.map-container {
-    height: 400px; /* Adjust the height as needed */
-    width: 100%;
-    position: relative; /* Ensures the map is positioned relative to its parent div */
-    z-index: 1; /* Ensures the map is displayed above elements with a lower z-index */
+.map-quiz-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
 
 
 .navigation-buttons {
     position: relative; /* Add this line */
     z-index: 0; /* Add this line */
+}
+
+.maps{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }

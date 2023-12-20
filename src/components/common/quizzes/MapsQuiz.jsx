@@ -161,7 +161,7 @@ function MapsQuiz() {
     console.log('currentCoordinate', currentCoordinate);
 
     return (
-        <div>
+        <div className='map-quiz-container'>
             <div>
                 Selected Section: {selectedSection}
             </div>
